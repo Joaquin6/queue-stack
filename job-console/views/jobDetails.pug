@@ -1,0 +1,176 @@
+extends layout
+
+block content
+  - var activeStates = ['processing', 'initializing'];
+  - var terminalStates = ['success', 'failed', 'timeout', 'aborted'];
+  - var isActive = activeStates.includes(job.currentStatus);
+  - var isDone = terminalStates.includes(job.currentStatus);
+  .row(style="margin-top:12px;")
+    div(class=isActive ? "col s4 m4" : "col s7 m7")
+      a.waves-effect.waves-light.teal.btn(href='/') Jobs
+        i.material-icons.left arrow_back
+
+    if !isDone
+      div(class=!isActive ? "col s3 m3" : "col s4 m4 right-align")
+        p(style='margin:0px;')
+          label
+            - var isChecked = query.autoreload ? true : false
+            input(id='auto-reload' type='checkbox' onclick='toggleAutoRefresh(this)' checked=isChecked)
+            span(style='padding-left: 24px;') Auto Update
+          label(style='padding-left:5px;')
+            i.small.material-icons timer
+            if query.autoreload
+              input.input-field.inline.validate(
+                id='auto-reload-frequency'
+                name='auto-reload-frequency'
+                type='number'
+                max='60'
+                min='5'
+                step='5'
+                maxlength='2'
+                style='margin: 0 0 8px 5px; width:20%; height: 2rem; font-size: 18px;'
+                value=`${query.autoreload}`
+              )
+            else
+              input.input-field.inline.validate(
+                id='auto-reload-frequency'
+                name='auto-reload-frequency'
+                type='number'
+                max='60'
+                min='5'
+                step='5'
+                maxlength='2'
+                style='margin: 0 0 8px 5px; width:20%; height: 2rem; font-size: 18px;'
+                value=`${config.autoUpdate}`
+                disabled='disabled'
+              )
+            span.right-align.helper-text(data-error='Frequency (in secs): Min: 5 - Max: 60')
+      .col.s2.m2
+        a.waves-effect.waves-light.btn.green.ligthen-2.right(id='manual-refresh' onclick='window.location.reload()') Refresh
+          i.material-icons.left refresh
+      if isActive
+        .col.s2.m2
+          button.waves-effect.waves-light.btn.red.ligthen-2.right.modal-trigger(id='cancel-job' data-target="ConfirmCancel") Cancel
+            i.material-icons.left cancel
+
+  if statuses.length
+    .row(style="margin-top:12px;")
+      .col.s12.m12
+        #job-card.card
+          - var status = statuses[0];
+          - var statusColor = 'blue';
+          - var [success, ...failedTerminalStates ] = terminalStates;
+          -
+            if (status.task === 'conductor') {
+              if (flow.flowState === success) {
+                statusColor = 'green';
+              } else if (failedTerminalStates.includes(flow.flowState)) {
+                statusColor = 'red';
+              }
+            }
+          .card-header(class=`${statusColor} darken-4`)
+            .card-title.activator(style="padding:14px; !important")
+              .row
+                .col.s6.m6
+                  h6.job-card-title #{job.name}
+                .col.s6.m6
+                  h6.job-card-title.right-align Last Update: #{moment(job.updatedOn).format('MMM DD, Y HH:mm:ss [UTC]')}
+          .card-content-bg
+            .card-content(style="padding-bottom: 8px;")
+              .row
+                strong.col.s1(style="font-weight:bold;") Status:
+                p#job-status-state.col.s2= flow.flowState
+                strong.col.s1(style="font-weight:bold;") Task:
+                p.col.s2= status.task
+                strong.col.s1(style="font-weight:bold;") Duration:
+                p.col.s5= job.duration
+              .divider
+              .row
+                strong.col.s1(style="font-weight:bold;") Details:
+                p.col.s11!= status.details.replace(/(https?:\/\/[^\s]+)/g, (url) => `<a href=${url} target="_blank">${url}</a>`)
+              .divider
+              .row
+                ul.collapsible(style="box-shadow: none; border: none; margin-bottom: 0px;")
+                  li
+                    .collapsible-header Show more
+                      i#show-more.material-icons arrow_drop_down
+                    .collapsible-body
+                      .row
+                        .col.s2
+                          strong.right-align Job ID:
+                        .col.s4
+                          p.left-align= job.jobId
+                        .col.s2
+                          strong.right-align Project ID:
+                        .col.s4
+                          p.left-align= job.projectId
+                      .row
+                        .col.s2
+                          strong.right-align Created By:
+                        .col.s4
+                          p.left-align= job.createdBy
+                        .col.s2
+                          strong.right-align Flight ID
+                        .col.s4
+                          p.left-align= job.flightId
+                      .row
+                        .col.s2
+                          strong.right-align Created On:
+                        .col.s4
+                          p.left-align= moment(job.createdOn).format('MMM DD, Y HH:mm:ss [UTC]')
+                        .col.s2
+                          strong.right-align Site ID:
+                        .col.s4
+                          p.left-align= job.siteId
+                      .row
+                        .col.s2
+                          strong.right-align Description:
+                        .col.s4
+                          p.left-align= job.description
+                        .col.s2
+                          strong.right-align Input Data:
+                        .col.s4
+                          p.left-align= job.inputPath
+                      if stateMachine.name !== 'N/A'
+                        .row
+                          .col.s2
+                            strong.right-align State Machine:
+                          .col.s4
+                            p.left-align= stateMachine.name
+
+  if statuses.length
+    .row
+      .col.s12.m12
+        .card.z-depth-2
+          .card-content
+            table.bordered.striped.floatThead-table
+              thead
+                th.state-thead-smaller Timeline
+                th.state-thead-smaller Task
+                th.state-thead-smaller Status
+                th.state-thead-smaller Details
+              tbody
+                each state in statuses
+                  tr
+                    td.state-date= moment(state.createdDate).format('MMM DD, Y HH:mm:ss [UTC]')
+                    td.side-borders
+                      p.state-task= state.task
+                    td.side-borders
+                      p.state-status= state.taskState
+                    td
+                      p.state-details!= state.details.replace(/(https?:\/\/[^\s]+)/g, (url) => `<a href="${url}" target="_blank">${url}</a>`)
+
+  .modal(id="ConfirmCancel")
+    form(method='POST' action=`/v1/jobs/${job.jobId}/cancel`)
+      .modal-content
+        h4 Confirm Job Cancellation
+        p Are you really sure you want to cancel this job?
+      .modal-footer
+        button.modal-close.waves-effect.waves-red.btn-flat(id="confirm-job-cancel-yes" type="submit") Yes
+        a.modal-close.waves-effect.waves-green.btn-flat(id="confirm-job-cancel-no" href=`/jobs/${job.jobId}`) No
+
+block scripts
+  script(type="text/javascript" src="/js/modal.js")
+  script(type="text/javascript" src="/js/paginate.js")
+  script(type="text/javascript").
+    $('table').paginate();

@@ -1,0 +1,6 @@
+extends layout
+
+block content
+  p There was an error handling your request
+  p= error && error.status
+  p= error && error.message

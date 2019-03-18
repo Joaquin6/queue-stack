@@ -1,0 +1,193 @@
+nav {
+  z-index: 3;
+  background-color: #5395E8;
+  color: #fff;
+}
+
+nav ul .menu-static-text {
+  font-size: 1rem;
+  color: #fff;
+  display: block;
+  padding: 0 15px;
+}
+
+h6 {
+  font-weight: bold;
+}
+
+.name {
+  width: 35%;
+}
+
+.date {
+  width: 22%;
+}
+
+p .state-date {
+  margin: 0;
+}
+
+.url {
+  width:23%;
+}
+
+.task {
+width: 10%;
+}
+
+.status {
+width: 10%;
+}
+
+.brand-logo img {
+  height: 26px;
+  margin-bottom: -2px;
+  margin-right: .75rem;
+}
+
+.container {
+  margin-bottom: 24px !important;
+}
+
+.page-footer {
+  left: 0;
+  bottom: 0;
+  padding-top: 0px !important;
+  width: 100%;
+  padding-top: 0px;
+  margin-top: 50px;
+}
+
+.fileBtn {
+  background-color: #5395E8;
+  position: absolute;
+  right: 0px;
+}
+
+.section {
+  padding: 0;
+}
+
+.jobInfoHeader {
+  padding: 10px;
+}
+
+.dataInfoHeader {
+  padding: 10px;
+}
+
+.row {
+  margin-bottom: 0;
+}
+
+.dataInputLabel {
+  position: relative !important;
+  padding-left: 10px !important;
+  font-size: .8rem !important;
+}
+
+.selectButton {
+  position: absolute;
+  top: 20px;
+}
+
+.state-thead-smaller {
+  font-size: 15px;
+}
+
+.state-task {
+  font-size: 14px;
+}
+
+.state-date {
+  font-size: 14px;
+}
+
+.state-status {
+  font-size: 14px;
+}
+
+.state-details {
+  font-size: 14px;
+}
+
+.status-label {
+  background-color: yellow;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.status-value {
+  background-color: yellow;
+  font-size: 15px;
+}
+
+.name-label {
+  background-color: gold;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.name-value {
+  background-color: gold;
+  font-size: 15px;
+}
+
+.deep-orange.accent-2 {
+  background-color: #ff6e40 !important;
+}
+
+.floatThead-table {
+  border-top: none;
+  border-bottom: none;
+  background-color: #FFF;
+}
+
+.floatThead-table th {
+  padding: 10px 18px;
+  border-bottom: 1px solid #111;
+  font-weight: bold;
+  text-align: left;
+  position: sticky;
+  top: 0px;
+  background: white;
+}
+
+tbody td.side-borders {
+  border-left: 1px solid rgba(0,0,0,0.12);
+  border-right: 1px solid rgba(0,0,0,0.12);
+}
+
+.collapsible-header {
+  padding: 0.25rem;
+  padding-left:0.70rem;
+  color:blue;
+  outline:none;
+}
+
+.collapsible-body {
+  border-bottom: none;
+  padding-top: 0.25rem;
+}
+
+#job-card .card-header .card-title {
+  padding: 0px;
+}
+
+#job-card .job-card-title {
+  margin: 0;
+  font-weight: 600;
+  color: #fff;
+}
+
+#job-card .job-card-date {
+  font-size: 1.0rem;
+  margin: 0;
+  color: #fff;
+}
+
+#job-card .divider {
+  height: 2px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}

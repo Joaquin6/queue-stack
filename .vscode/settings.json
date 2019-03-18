@@ -1,0 +1,9 @@
+{
+  "editor.autoIndent": false,
+  "editor.formatOnSave": false,
+  "editor.formatOnPaste": false,
+  "eslint.autoFixOnSave": false,
+  "eslint.packageManager": "yarn",
+  "eslint.enable": false,
+  "prettier.singleQuote": true
+}

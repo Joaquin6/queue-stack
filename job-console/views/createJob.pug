@@ -1,0 +1,27 @@
+extends layout
+
+mixin input12(field, label, placeholder, type)
+  - var val = (values && values[field]) || ''
+  .input-field.col.s12(class={invalid: isInvalid})
+    input.validate(id=field name=field placeholder=placeholder required class={invalid: isInvalid} value=val type=type)
+    label(for=field class={invalid: isInvalid})= label
+    if block
+      block
+    if isInvalid
+      span.helper-text.red-text= errors[field]
+
+block content
+  form(method='POST' action='/v1/jobs')
+    h5 Create New Job
+    .section
+      h6.jobInfoHeader Fill out the information below:
+      .row
+        +input12('name', 'Job Name', 'Name of the processing job', 'text')
+      .row
+        +input12('url', 'Site URL', 'Identifying information about the site url (e.g., http://google.com)', 'text')
+
+    .section
+      .row
+        .col.push-s10
+          a.modal-close.waves-effect.waves-green.btn-flat(href='/') Cancel
+          button.waves-effect.waves-green.teal.btn(type='submit') Submit

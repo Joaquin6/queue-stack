@@ -1,0 +1,33 @@
+{
+    "restartable": "rs",
+    "ignore": [
+      ".git",
+      "coverage",
+      "data",
+      "db",
+      "src",
+      "views",
+      "test",
+      "node_modules/**/node_modules"
+    ],
+    "verbose": true,
+    "execMap": {
+      "js": "node --harmony"
+    },
+    "events": {
+      "restart": "echo \"App restarted due to changes on:\n\t'$FILENAME'\"",
+      "config:update": "echo \"App restarted due to changes on:\n\tnodemon configurations\""
+    },
+    "watch": [
+      "config/",
+      "redis/"
+    ],
+    "env": {
+      "NODE_ENV": "development",
+      "NODE_DEBUG": "bull"
+    },
+    "ext": "js,json,pug",
+    "stdin": true,
+    "stdout": true,
+    "exec": "node -r dotenv/config -r babel-register redis/worker.js"
+  }

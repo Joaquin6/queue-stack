@@ -1,0 +1,25 @@
+extends layout
+
+block content
+  h5 Jobs Dashboard
+  table.highlight
+    thead
+      tr
+        th(class='name') Name
+        th(class='url') URL
+        th(class='date') Created On
+        th(class='status') Status
+    tbody
+      .row
+        each job in data
+          tr
+            td(class='name')
+              a(href=`/jobs/${job.id}`)= job.name
+            td= job.url
+            td #{moment(job.createdOn).format('MMM DD, Y HH:mm:ss [UTC]')}
+            td= job.status
+
+block scripts
+  script(type="text/javascript" src="/js/paginate.js")
+  script(type="text/javascript").
+    $('table').paginate();

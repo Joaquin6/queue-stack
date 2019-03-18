@@ -1,0 +1,50 @@
+version: '2'
+
+services:
+  job-console:
+    build: ./job-console
+    container_name: job-console.local.io
+    environment:
+      DATABASE_URL: postgres://job-console:password@job-console-pg/job-console
+      REDIS_URL: redis://job-console-redis
+      PORT: 3100
+    image: job-console
+    ports:
+      - 3100:3100
+    volumes:
+      - ./job-console:/usr/src/app
+      - ./persist/yarn/job-console:/usr/local/share/.cache/yarn
+      - ./persist/data:/data
+    depends_on:
+      - job-console-pg
+      - job-console-redis
+
+  job-console-pg:
+    restart: always
+    image: postgres
+    container_name: job-console-pg
+    volumes:
+      - ./persist/job-console-pg:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: job-console
+      POSTGRES_USER: job-console
+      POSTGRES_PASSWORD: password
+
+  job-console-redis:
+    image: redis
+    container_name: job-console-redis
+    expose:
+      - 6379
+
+  redis-worker:
+    build: ./job-console
+    container_name: redis-worker
+    environment:
+      NODE_ENV: development
+      PORT: 3100
+      REDIS_URL: redis://job-console-redis
+    command: yarn worker:dev
+    volumes:
+      - ./job-console:/usr/src/app
+    links:
+      - job-console-redis
